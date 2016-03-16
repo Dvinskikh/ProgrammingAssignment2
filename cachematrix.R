@@ -1,41 +1,42 @@
 makeMatrix <- function(x = matrix())
 {
-  slv <- NULL  ##variable for caching Solve() result
+  ##variable for caching Solve() result
+  cache <- NULL
   
-  ##function, setting new matrix value:
+  ##sets new matrix value:
   set <- function(y)
   {
     x <<- y
-    slv <<- NULL
+    cache <<- NULL
   }
   
-  ##function, which returns matrix:
+  ##returns matrix:
   get <- function() x
   
-  ##function, setting new slv value:
-  setslv <- function(new_val) slv <<- new_val
-  ##function, which returns slv value:
-  getslv <- function() slv
+  #sets new cache value:
+  set_cache <- function(new_val) cache <<- new_val
+  ##returns cache value:
+  getcache <- function() cache
   
   list(set = set, get = get,
-       setslv = setslv,
-       getslv = getslv)
+       set_cache = set_cache,
+       getcache = getcache)
 }
 
 cacheSolve <- function(x, ...) {
-  ##getting old slv value
-  slv <- x$getslv()
-  ##checking if old cached value of slv is actual and returning it, if it is.
-  if(!is.null(slv))
+  ##getting old cache value
+  cache <- x$getcache()
+  ##check if old cached value is not NULL
+  if(!is.null(cache))
   {
     message("getting cached data")
-    return(slv)
+    return(cache)
   }
   
   data <- x$get()
   ##calculating new value to cache
-  slv <- solve(data, ...)
-  ##updating slv
-  x$setslv(slv)
-  slv
+  cache <- solve(data, ...)
+  ##updating cache
+  x$set_cache(cache)
+  cache
 }
